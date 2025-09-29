@@ -11,7 +11,7 @@ async function readPostsJson(onlyIds = false) { // Defines an asynchronous funct
     if (onlyIds) { // Check if only IDs are requested.
         jsonObj = querySnapshot.docs.map(doc => ({ id: doc.id })); // If `onlyIds` is true, map documents to an array of objects containing only the document ID.
     } else { // If full post data is requested.
-        jsonObj = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })); // Map documents to an array of objects, including ID and all document data.
+        jsonObj = querySnapshot.docs.map(doc => Object.assign({ id: doc.id }, doc.data())); // Map documents to an array of objects, including ID and all document data.
     }
 
     return jsonObj; // Return the processed JSON object/array.
@@ -67,7 +67,7 @@ export async function getPostData(id) { // Defines an asynchronous function to g
         )
     );
     const querySnapshot = await getDocs(searchQuery); // Execute the query to get the document snapshot.
-    const jsonObj = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })); // Map the document snapshot to an object containing the ID and data.
+    const jsonObj = querySnapshot.docs.map(doc => Object.assign({ id: doc.id }, doc.data())); // Map the document snapshot to an object containing the ID and data.
 
     // Check if a post was found.
     if (jsonObj.length === 0) { // If no document was returned by the query.
